@@ -6,7 +6,6 @@ import soundfile as sf
 import requests
 
 client = OpenAI(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
     api_key="sk-cb4649dc7971491895b647095dd5b40e",
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
