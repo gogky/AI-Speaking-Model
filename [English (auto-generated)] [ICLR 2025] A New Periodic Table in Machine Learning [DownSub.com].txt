@@ -1,0 +1,137 @@
+Hi, my name is Chaden and I am excited
+to share our work icon which is a
+unifying framework for representation
+learning. Over the past two decades,
+representation learning has flourished
+with new techniques, architectures and
+loss functions emerging almost daily.
+But as the field grows, the sheer
+variety of loss functions makes it
+harder to see how different methods are
+connected and which ones are better
+suited for specific tasks. In this work,
+we introduce a mathematical framework
+that unifies 23 commonly used methods in
+representation
+learning. Specifically, we prove that
+all of these methods share the exact
+underlying objective rooted in
+information theory. Based on this
+insight, we organize them into the
+following periodic table. And throughout
+this table, we can identify and fill the
+gaps to drive new methods or transfer
+ideas across domains, which is exactly
+what we did to achieve state-of-the-art
+results in unsupervised image
+classification. Let's walk through the
+framework to understand how it works.
+Suppose we start with a bunch of images.
+We have a supervisory signal that
+defines how likely we are to pick one
+image given another. On the other side,
+we have a mapper. It could be parametric
+or nonparametric. This mapper gives us
+learned representations which in turn
+define another conditional distribution
+but this time it's solely based on
+representations. The goal is to align
+these two distributions by minimizing
+the kale divergence between
+them. The differences across methods
+come from the choices of these two
+distributions E and Q. For example, they
+can be based on a metric space like a
+Gausian kernel or
+KN&N. They can also involve some
+discrete
+labels or they can be based on cluster
+assignments or even more complex graph
+structures. Let's go over four examples,
+one from each subdomain. We'll start
+with TSN which is a dimensions reduction
+techniques to map highdimensional data
+from 2D or 3D into 1D in this
+example. For it we are using a
+nonparametric mapper and say we have two
+points X I and XJ. We're mapping them to
+f of X I and F of XJ. The goal here is
+to preserve local neighborhood
+relationships.
+Therefore, in testy, we measure the
+likelihood of choosing XJ as Xi's
+neighbor based on a Gaussian plopped
+around or centered around
+Xi. While on the low dimension space, we
+are doing exactly the same, but instead
+of using a Gaussian, we're using a
+student t
+distribution. And the goal here is to
+match these two distributions, meaning
+that closed neighbors in high
+dimensional space are also closed
+neighbors in low dimensional space. This
+optimization can be done by minimizing
+the KL divergence. Now let's look at
+contrastive learning like SIM clear.
+Here we start with images and their
+augmentations and we want to map them
+into some embeddings that are often
+constrained to be on a unit sphere. This
+can be done through a parametric mapper
+like a neural network that encodes them.
+on the super on the supervisory side, we
+treat image pairs as neighbors if
+they're augmentations of the same image
+and not
+otherwise. While on the learned side, we
+define neighborhood probabilities based
+on distances often with a gausian
+kernel. Again, matching these two
+distributions via KL divergence
+simplifies to the info loss that is
+commonly used in contrastive learning.
+Therefore, these two problems from
+dimensional reduction and contrastive
+learning minimize the same objective
+that is the icon
+objective. The framework also covers
+clustering methods like K means. Suppose
+we have some 2D features and we want to
+assign them into clusters using some
+lookup table that is nonparametric.
+In the 2D space, neighbors can be
+defined based on distances such as a
+gausian kernel. While in the learn
+space, neighbors are defined based on
+their cluster assignments. If we align
+these two distributions by KL divergence
+again, we end up with a K means like
+clustering
+objective. Supervised learning fits in
+here too. We map input label pairs into
+embedding using a parametric mapper like
+resonate or
+transformer. Each image map into its
+correct label with probability one and
+zero for all of the others. On the learn
+side, we compute probabilities using
+distances between an image embedding and
+class
+prototypes. This can be done through a
+gausian. Again, the results will be a
+probability distribution over classes.
+Let's say 0.7 for class dog, 0.2 for
+cat, and 0.1 for flower. And again,
+minimizing the kale divergence gives us
+the supervised cross entropy
+loss. Here is a quick simulation on
+emnest using our codebase. You can see
+how the predicted and target
+distributions blue and orange converge
+over time.
+These are just four out of many methods
+captured into our framework. To explore
+the rest, check our website for the
+paper codebased blog post and demo.
+Thank you for watching.
