@@ -80,6 +80,25 @@ def judge_test():
     }
     return jsonify(response)
 
+@app.route('/text_to_audio', methods=['POST'])
+def text_to_audio():
+    data = request.get_json()
+    text = data.get('text')
+    output_file_path = f"tmp_data/text_to_audio_{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}.wav"
+    
+    # Call the convert_text_to_audio function here
+    from voice2text import convert_text_to_audio
+    convert_text_to_audio(text, output_file_path)
+    
+    with open(output_file_path, "rb") as audio_file:
+        audio_data = audio_file.read()
+    audio_base64 = base64.b64encode(audio_data).decode('utf-8')
+    
+    response = {
+        'audio': audio_base64,
+        'text': text
+    }
+    return jsonify(response)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5001)
