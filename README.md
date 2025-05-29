@@ -1,19 +1,105 @@
-# AI-Speaking-Model
-小组作业AI-Speaking的Python代码部分，调用相关模型完成任务。目前主要使用的模型是Qwen2.5-Omni。
+# AI Speaking Model API
 
-## 已完成的部分如何使用
-```bash
-pip install openai numpy soundfile requests
-python qwen_omni_inference.py
+基于 Flask 的多模态学术报告助手，提供以下功能：  
+1. 文本生成提问  
+2. 演讲音频评估  
+3. 文本转语音  
+
+## 目录
+
+- [安装](#安装)  
+- [配置](#配置)  
+- [运行](#运行)  
+- [API 端点](#api-端点)  
+  - [GET `/`](#get-)  
+  - [POST `/gen_question`](#post-gen_question)  
+  - [POST `/judge`](#post-judge)  
+  - [POST `/judge_test`](#post-judge_test)  
+  - [POST `/text_to_audio`](#post-text_to_audio)  
+- [文件结构](#文件结构)  
+
+## 安装
+
+```sh
+git clone git@github.com:gogky/AI-Speaking-Model.git
+cd AI-Speaking-Model
+pip install flask openai dashscope numpy soundfile requests librosa whisper matplotlib pydub scikit-learn python-Levenshtein nltk
 ```
-## 已完成的部分
-- 输入演讲语音，输出语音点评和提问。
 
-## 待完成的部分
-- 与Unity部分的交互。
-- 上传演讲稿，根据演讲稿生成提问内容。
-- 多轮对话。
+## 配置
+在 `config.py` 中配置 OpenAI API 密钥和其他参数：
 
-## 或许可以完成的部分
-- Qwen2.5-Omni无法识别语调与情绪。使用情感分析模型，与大模型组合使用。
-- Qwen2.5-Omni的本地部署与微调，让其可以更适合本项目的场景。
+## 运行
+```sh
+python app.py
+```
+默认监听 http://127.0.0.1:5001/
+
+## API 端点
+### POST /gen_question
+根据演讲稿生成 N 个英文提问，并返回合成音频（Base64）及文本。
+#### 请求示例
+```json
+POST /judge
+Content-Type: application/json
+
+{
+  "speech_text": "Your speech text here",
+  "n": 5
+}
+```
+#### 响应示例
+```json
+{
+  "audio": "<base64-wav-data>",
+  "text": "1. Question one?\n2. Question two?\n3. Question three?"
+}
+```
+
+### POST /judge
+根据演讲稿与用户音频，输出评委点评音频与 JSON 结果。
+#### 请求示例
+```json
+POST /judge
+Content-Type: application/json
+
+{
+  "speech_text": "Lecture transcript here...",
+  "speaker_audio": "<base64-wav-data>"
+}
+```
+#### 响应示例
+```json
+{
+  "audio": "<base64-wav-data>",
+  "judge": {
+    "speech_text": "...",
+    "speaker_audio": "...",
+    "speaker_text": "...",
+    "audio_output_path": "...",
+    "differences": "...",
+    "match_score": 0.85,
+    "judge_text": "评分与点评文本"
+  }
+}
+```
+
+### POST /text_to_audio
+将文本转为语音并返回合成音频（Base64）及原文。
+
+#### 请求示例
+```json
+POST /text_to_audio
+Content-Type: application/json
+
+{
+  "text": "Hello, this is a test."
+}
+```
+#### 响应示例
+```json
+{
+  "audio": "<base64-wav-data>",
+  "text": "Hello, this is a test."
+}
+```
