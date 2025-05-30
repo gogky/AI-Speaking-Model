@@ -103,3 +103,25 @@ Content-Type: application/json
   "text": "Hello, this is a test."
 }
 ```
+
+### POST /gen_hello
+根据输入文本生成欢迎语音并返回合成音频（Base64）及原文。
+* 还没写
+
+#### 请求示例
+```json
+POST /gen_hello
+Content-Type: application/json
+
+{
+  "speaker_name": "John Doe",
+  "speech_title": "AI Speaking Model Introduction"
+}
+```
+#### 响应示例
+```json
+{
+  "audio": "<base64-wav-data>",
+  "text": "Hello, welcome to the AI Speaking Model introduction by John Doe."
+}
+```

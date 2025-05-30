@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 import time
 import base64
+import os
 
 app = Flask(__name__)
 
@@ -18,7 +19,9 @@ def generate_questions():
     # Call the generate_question function here
     from questionGenerator import generate_question
     now_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    output_file_path = f"tmp_data/generate_questions_{now_time}.wav"
+    output_file_path = f"generate_questions_{now_time}.wav"
+    output_file_path = os.path.join("tmp_data", output_file_path)
+    # output_file_path = f"tmp_data/generate_questions_{now_time}.wav"
     question = generate_question(text, n, output_file_path)
     with open(output_file_path, "rb") as audio_file:
         audio_data = audio_file.read()
@@ -35,11 +38,16 @@ def judge():
     speech_text = data.get('speech_text')
     speaker_audio = data.get('speaker_audio')
     audio_bytes = base64.b64decode(speaker_audio)
-    tmp_audio_file_path = f"tmp_data/speaker_audio_{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}.wav"
+    tmp_audio_file_path = f"speaker_audio_{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}.wav"
+    tmp_audio_file_path = os.path.join("tmp_data", tmp_audio_file_path)
+    # tmp_audio_file_path = f"tmp_data/speaker_audio_{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}.wav"
+
     with open(tmp_audio_file_path, "wb") as audio_file:
         audio_file.write(audio_bytes)
 
-    audio_output_path = f"tmp_data/judge_{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}.wav"
+    audio_output_path = f"judge_{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}.wav"
+    audio_output_path = os.path.join("tmp_data", audio_output_path)
+    # audio_output_path = f"tmp_data/judge_{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}.wav"
     
     # Call the Judger class here
     from judger import Judger
@@ -64,7 +72,9 @@ def judge_test():
     speech_text = read_text_file("[English (auto-generated)] [ICLR 2025] A New Periodic Table in Machine Learning [DownSub.com].txt")
     # 读取音频文件
     tmp_audio_file_path = "No.10 3 Qingdao Road 3.m4a"
-    audio_output_path = f"tmp_data/judge_test_{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}.wav"
+    audio_output_path = f"judge_test_{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}.wav"
+    audio_output_path = os.path.join("tmp_data", audio_output_path)
+    # audio_output_path = f"tmp_data/judge_test_{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}.wav"
 
     from judger import Judger
     judger = Judger(speech_text, tmp_audio_file_path, audio_output_path)
@@ -84,7 +94,9 @@ def judge_test():
 def text_to_audio():
     data = request.get_json()
     text = data.get('text')
-    output_file_path = f"tmp_data/text_to_audio_{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}.wav"
+    output_file_path = f"text_to_audio_{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}.wav"
+    output_file_path = os.path.join("tmp_data", output_file_path)
+    # output_file_path = f"tmp_data/text_to_audio_{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}.wav"
     
     # Call the convert_text_to_audio function here
     from voice2text import convert_text_to_audio
