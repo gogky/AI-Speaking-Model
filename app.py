@@ -113,4 +113,6 @@ def text_to_audio():
     return jsonify(response)
 
 if __name__ == '__main__':
+    if not os.path.exists("tmp_data"):
+        os.makedirs("tmp_data")
     app.run(debug=True, port=5001)
