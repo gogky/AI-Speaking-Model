@@ -99,7 +99,7 @@ def text_to_audio():
     data = request.get_json()
     text = data.get('text')
     now_time = get_now_time()
-    output_file_path = f"text_to_audio_{get_now_time()}.wav"
+    output_file_path = f"text_to_audio_{now_time}.wav"
     output_file_path = os.path.join("tmp_data", output_file_path)
     # output_file_path = f"tmp_data/text_to_audio_{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}.wav"
     
@@ -116,6 +116,36 @@ def text_to_audio():
         'text': text
     }
     return jsonify(response)
+
+@app.route('/gen_hello', methods=['POST'])
+def gen_hello():
+    data = request.get_json()
+    name = data.get("speaker_name")
+    title = data.get("speech_title")
+    if not name or not title:
+        return jsonify({"error": "Missing speaker_name or speech_title"}), 400
+    
+    now_time = get_now_time()
+    output_file_path = f"gen_hello_{now_time}.wav"
+    output_file_path = os.path.join("tmp_data", output_file_path)
+
+    from helloGenerator import generate_hello
+    hello_text = generate_hello(name, title, output_file_path)
+    if isinstance(hello_text, str) and hello_text.startswith("Error:"):
+        return jsonify({"error": hello_text}), 500
+    
+    with open(output_file_path, "rb") as audio_file:
+        audio_data = audio_file.read()
+    audio_base64 = base64.b64encode(audio_data).decode('utf-8')
+
+    response = {
+        'audio': audio_base64,
+        'text': hello_text
+    }
+    return jsonify(response)
+
+    
+
 
 if __name__ == '__main__':
     if not os.path.exists("tmp_data"):
