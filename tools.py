@@ -7,3 +7,7 @@ def encode_audio(audio_path):
 def read_text_file(file_path):
     with open(file_path, "r", encoding="utf-8") as file:
         return file.read()
+    
+def get_now_time():
+    import time
+    return time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime())
