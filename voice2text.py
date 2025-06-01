@@ -51,14 +51,30 @@ def convert_audio_to_text(audio_file_path):
 
     return text
 
-def convert_text_to_audio(text, output_file_path):
+def convert_text_to_audio(text, output_file_path, voice=None):
     import dashscope
+
+    voice_options = [
+        "Cherry",
+        "Serena",
+        "Ethan",
+        "Ethan",
+        "Ethan",
+        "Chelsie"
+    ]
+
+    if voice and voice not in voice_options:
+        print(f"Warning: Voice '{voice}' is not available. Using default voice 'Cherry'.")
+        voice = voice_options[random.randint(0, len(voice_options) - 1)]
+    elif not voice:
+        import random
+        voice = voice_options[random.randint(0, len(voice_options) - 1)]
 
     response = dashscope.audio.qwen_tts.SpeechSynthesizer.call(
         model="qwen-tts",
         api_key=os.getenv("DASHSCOPE_API_KEY"),
         text=text,
-        voice="Cherry",
+        voice=voice,
         stream=False,
     )
 
@@ -78,13 +94,13 @@ def convert_text_to_audio(text, output_file_path):
     download_audio(file_url, output_file_path)
 
 if __name__ == "__main__":
-    audio_file_path = "/Users/feisen/Downloads/test-speak01/audio_assistant_py1.wav"
-    audio_file_path = "No.10 3 Qingdao Road 3.m4a"
-    text = convert_audio_to_text(audio_file_path)
-    print(text)
+    # audio_file_path = "/Users/feisen/Downloads/test-speak01/audio_assistant_py1.wav"
+    # audio_file_path = "No.10 3 Qingdao Road 3.m4a"
+    # text = convert_audio_to_text(audio_file_path)
+    # print(text)
 
     text = "Hello, this is a test of the audio to text conversion system. Please ensure that the transcription is accurate and clear."
-    output_file_path = "output.wav"
+    output_file_path = os.path.join("tmp_data","convert_text_to_audio_test.wav")
     convert_text_to_audio(text, output_file_path)
 
     pass

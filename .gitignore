@@ -2,4 +2,4 @@ tmp_data/*
 
 !tmp_data/.gitkeep
 
-__pycache__/
+__pycache__/*
